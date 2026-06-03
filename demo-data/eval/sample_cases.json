@@ -1,0 +1,44 @@
+[
+  {
+    "question": "What steps are in the RAG pipeline?",
+    "expected_answer_summary": "Ingestion, chunking, embedding, retrieval, generation",
+    "category": "direct_answer",
+    "difficulty": "easy",
+    "expected_behavior": "answer_with_citations"
+  },
+  {
+    "question": "What is the deployment process for microservices?",
+    "expected_answer_summary": "From architecture docs if uploaded",
+    "category": "metadata_filtered",
+    "difficulty": "medium",
+    "expected_behavior": "answer_with_citations"
+  },
+  {
+    "question": "What is the capital of Mars colony alpha in 3025?",
+    "expected_answer_summary": "No supporting evidence",
+    "category": "no_supporting_evidence",
+    "difficulty": "easy",
+    "expected_behavior": "insufficient_evidence"
+  },
+  {
+    "question": "How do architecture decision records relate to API design?",
+    "expected_answer_summary": "May require multiple chunks",
+    "category": "multi_chunk",
+    "difficulty": "hard",
+    "expected_behavior": "answer_with_citations"
+  },
+  {
+    "question": "List environment variables for the backend.",
+    "expected_answer_summary": "From env documentation",
+    "category": "citation_required",
+    "difficulty": "medium",
+    "expected_behavior": "answer_with_citations"
+  },
+  {
+    "question": "What should clinicians do for this patient?",
+    "expected_answer_summary": "Ambiguous without context",
+    "category": "ambiguous",
+    "difficulty": "medium",
+    "expected_behavior": "insufficient_evidence"
+  }
+]

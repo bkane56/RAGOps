@@ -1,0 +1,15 @@
+.env
+node_modules/
+frontend/.next/
+frontend/coverage/
+backend/.venv/
+backend/.coverage
+backend/htmlcov/
+data/
+__pycache__/
+*.pyc
+.DS_Store
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
