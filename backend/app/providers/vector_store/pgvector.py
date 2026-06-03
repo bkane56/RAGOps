@@ -44,22 +44,23 @@ class PgVectorStore(VectorStore):
     ) -> list[RetrievedChunk]:
         embedding_str = "[" + ",".join(str(x) for x in query_embedding) + "]"
         doc_filter_sql = ""
-        params: dict = {"embedding": embedding_str, "top_k": top_k}
+        params: dict = {"query_embedding": embedding_str, "top_k": top_k}
         if document_ids:
-            doc_filter_sql = "AND c.document_id = ANY(:doc_ids)"
+            doc_filter_sql = "AND c.document_id = ANY(CAST(:doc_ids AS uuid[]))"
             params["doc_ids"] = [str(d) for d in document_ids]
 
+        # Use CAST(... AS vector) — :name::vector breaks SQLAlchemy named bind params.
         sql = text(
             f"""
             SELECT c.id, c.document_id, d.filename, c.text, c.page_number,
                    c.token_estimate,
-                   1 - (e.embedding <=> :embedding::vector) AS similarity
+                   1 - (e.embedding <=> CAST(:query_embedding AS vector)) AS similarity
             FROM chunk_embeddings e
             JOIN chunks c ON c.id = e.chunk_id
             JOIN documents d ON d.id = c.document_id
             WHERE d.status = 'ready'
             {doc_filter_sql}
-            ORDER BY e.embedding <=> :embedding::vector
+            ORDER BY e.embedding <=> CAST(:query_embedding AS vector)
             LIMIT :top_k
             """
         )

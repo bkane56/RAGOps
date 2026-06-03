@@ -22,13 +22,22 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      ...(options?.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
-      ...options?.headers,
-    },
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        ...(options?.body instanceof FormData ? {} : { "Content-Type": "application/json" }),
+        ...options?.headers,
+      },
+    });
+  } catch {
+    throw new ApiError(
+      `Cannot reach API at ${API_BASE}. Check that the backend is running on port 8000.`,
+      "network_error",
+      0,
+    );
+  }
   if (!response.ok) {
     let message = `Request failed (${response.status})`;
     let code = "http_error";
